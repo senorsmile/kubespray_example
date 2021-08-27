@@ -1,0 +1,3 @@
+[submodule "external/kubespray_senorsmile"]
+	path = external/kubespray_senorsmile
+	url = git@github.com:senorsmile/kubespray.git
