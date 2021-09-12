@@ -1,0 +1,80 @@
+---
+kubespray_hosts:
+  children:
+    vagrant_nodes:
+      vars:
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+        ansible_user: vagrant
+        ansible_become_pass: vagrant
+        #ansible_ssh_private_key_file: "{{ playbook_dir }}/.vagrant/machines/{{ inventory_hostname }}/virtualbox/private_key" # must apply from playbook so it gets set at the right "level"
+
+        flannel_interface: enp0s8
+
+
+
+      hosts:
+        kube-con01:
+          ansible_host:     192.168.95.101
+          ip:               "{{ ansible_host }}"
+        kube-con02:
+          ansible_host:     192.168.95.102
+          ip:               "{{ ansible_host }}"
+        kube-con03:
+          ansible_host:     192.168.95.103
+          ip:               "{{ ansible_host }}"
+
+        kube-node01:
+          ansible_host:     192.168.95.111
+          ip:               "{{ ansible_host }}"
+
+    k8s_cluster:
+      children:
+
+        kube_control_plane:
+          hosts:
+            kube-con01:
+              etcd_member_name: etcd01
+            kube-con02:
+              etcd_member_name: etcd02
+            kube-con03:
+              etcd_member_name: etcd03
+          vars: 
+            #****************
+            # metallb
+            #****************
+            kube_proxy_strict_arp: true
+            metallb_enabled: true
+            metallb_speaker_enabled: true
+            metallb_ip_range:
+              - 192.168.95.101/32
+            #****************
+
+        etcd:
+          hosts:
+            kube-con01:
+            kube-con02:
+            kube-con03:
+
+        kube_node:
+          hosts:
+            kube-node01:
+
+        calico_rr:
+
+      vars: # k8s_cluster
+
+        kube_network_plugin: flannel 
+        kube_network_plugin_multus: false 
+
+
+        download_run_once: True 
+        download_localhost: False 
+        #download_cache_dir: /tmp/kubespray_cache 
+        download_cache_dir: "{{ playbook_dir }}/tmp/"
+        download_force_cache: True 
+        download_keep_remote_cache: False 
+        # docker_rpm_keepcache: 1 
+        kubeconfig_localhost: True 
+        # kubectl_localhost: True 
+        # local_path_provisioner_enabled: false 
+        # local_path_provisioner_claim_root: /opt/local-path-provisioner/ 
