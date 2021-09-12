@@ -14,7 +14,24 @@
 
     - set_fact:
         ansible_ssh_private_key_file: "{{ playbook_dir }}/.vagrant/machines/{{ inventory_hostname }}/virtualbox/private_key"
+
+
         artifacts_dir: "{{ playbook_dir }}/tmp/artifacts/"
+        download_run_once: True
+        download_localhost: False
+        download_cache_dir: "{{ playbook_dir }}/tmp/"
+        download_force_cache: True
+        download_keep_remote_cache: False
+        # docker_rpm_keepcache: 1
+        kubeconfig_localhost: True
+        # kubectl_localhost: True
+        # local_path_provisioner_enabled: false
+        # local_path_provisioner_claim_root: /opt/local-path-provisioner/
+
+
+        kube_network_plugin: flannel
+        kube_network_plugin_multus: false
+
 
     - name: ensure connectivity
       raw: uptime

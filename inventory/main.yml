@@ -62,19 +62,6 @@ kubespray_hosts:
         calico_rr:
 
       vars: # k8s_cluster
-
-        kube_network_plugin: flannel 
-        kube_network_plugin_multus: false 
+        # see site.yml for nearly all cluster wide vars
 
 
-        download_run_once: True 
-        download_localhost: False 
-        #download_cache_dir: /tmp/kubespray_cache 
-        download_cache_dir: "{{ playbook_dir }}/tmp/"
-        download_force_cache: True 
-        download_keep_remote_cache: False 
-        # docker_rpm_keepcache: 1 
-        kubeconfig_localhost: True 
-        # kubectl_localhost: True 
-        # local_path_provisioner_enabled: false 
-        # local_path_provisioner_claim_root: /opt/local-path-provisioner/ 
